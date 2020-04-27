@@ -9,12 +9,14 @@ admin.initializeApp(functions.config().firebase);
 // SECION2:TRIGGERING SECTION THIS WILL WATCHING YOUR DATABASE DAY AND NIGHT
 
 
-exports.appTrigger = functions.firestore.document("discussion/{anydocument}").onCreate(async(change, context) => {
+exports.appTrigger = functions.firestore.document("/discussion/{documents}").onCreate((creation, context) => {
 
-    const receiver = change.data['destinataireUid'];
-    const sender = change.data['expediteurUid'];
-    const messageis = change.data['content'];
-    const type = change.data['type'];
+    const newDoc = creation.data();
+
+    const receiver = newDoc.destinataireUid;
+    const sender = newDoc.expediteurUid;
+    const messageis = newDoc.content;
+    const type = newDoc.type;
 
 
     //SECTION3:GETING THE FCM CODE OF RECEIVER 
@@ -24,7 +26,7 @@ exports.appTrigger = functions.firestore.document("discussion/{anydocument}").on
 
     return Promise.all([toUser]).then(async result => { // as it is in array you can perfom more promisses now just leavae it as it is
 
-        const tokenId = result[0].data['token']; //we are geting the his fcm tokenId
+        const tokenId = result[0].token; //we are geting the his fcm tokenId
 
 
         /////// SECTION4: PREPARING A NOTIFICATION
