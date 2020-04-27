@@ -9,7 +9,7 @@ admin.initializeApp(functions.config().firebase);
 // SECION2:TRIGGERING SECTION THIS WILL WATCHING YOUR DATABASE DAY AND NIGHT
 
 
-exports.appTrigger = functions.firestore.document("/discussion/{documents}").onCreate((creation, context) => {
+exports.Triger = functions.firestore.document("/discussion/{documents}").onCreate((creation, context) => {
 
     const newDoc = creation.data();
 
@@ -77,7 +77,7 @@ exports.appTrigger = functions.firestore.document("/discussion/{documents}").onC
 
 
         return admin.messaging().sendToDevice(
-            tokenId, //here we use the receiver's fcm token id to send notifcations
+            "cVYYWJjwpDU:APA91bHOQMVqQheRPo3vyJU3bIzH04iZ9xWyU4nIxSUg4XqOLUJZmZDLZEhVbAu-M5YReyiCd3xHs5o1TmALHepaFitUNZdOm2h3HF_fEaZPALhS7pRtaruNzDPQOsi63gOCLEGvREId", //here we use the receiver's fcm token id to send notifcations
             notificationContent //this is the notication content which is on the line 46 to 52
         ).
         then(result => {
