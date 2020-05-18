@@ -26,7 +26,7 @@ exports.Triger = functions.firestore.document("/discussion/{documents}").onCreat
 
     return Promise.all([toUser]).then(async result => { // as it is in array you can perfom more promisses now just leavae it as it is
 
-        const tokenId = result[0].token; //we are geting the his fcm tokenId
+        const tokenId = result[0].docs[0].data().token; //we are geting the his fcm tokenId
 
 
         /////// SECTION4: PREPARING A NOTIFICATION
@@ -42,6 +42,9 @@ exports.Triger = functions.firestore.document("/discussion/{documents}").onCreat
                         body: messageis, //we use the receiver's name and message to show in notifcation
                         icon: "default", //you can change the icon on the app side too
                         sound: "default" //also you can change the sound in app side
+                    },
+                    data: {
+                        tok: tokenId
                     }
                 };
                 break;
@@ -54,6 +57,9 @@ exports.Triger = functions.firestore.document("/discussion/{documents}").onCreat
                         body: "Photo", //we use the receiver's name and message to show in notifcation
                         icon: "default", //you can change the icon on the app side too
                         sound: "default" //also you can change the sound in app side
+                    },
+                    data: {
+                        tok: tokenId
                     }
                 };
                 break;
@@ -66,6 +72,9 @@ exports.Triger = functions.firestore.document("/discussion/{documents}").onCreat
                         body: "unknown", //we use the receiver's name and message to show in notifcation
                         icon: "default", //you can change the icon on the app side too
                         sound: "default" //also you can change the sound in app side
+                    },
+                    data: {
+                        tok: tokenId
                     }
                 };
                 break;
@@ -77,7 +86,7 @@ exports.Triger = functions.firestore.document("/discussion/{documents}").onCreat
 
 
         return admin.messaging().sendToDevice(
-            "cVYYWJjwpDU:APA91bHOQMVqQheRPo3vyJU3bIzH04iZ9xWyU4nIxSUg4XqOLUJZmZDLZEhVbAu-M5YReyiCd3xHs5o1TmALHepaFitUNZdOm2h3HF_fEaZPALhS7pRtaruNzDPQOsi63gOCLEGvREId", //here we use the receiver's fcm token id to send notifcations
+            tokenId, //here we use the receiver's fcm token id to send notifcations
             notificationContent //this is the notication content which is on the line 46 to 52
         ).
         then(result => {
